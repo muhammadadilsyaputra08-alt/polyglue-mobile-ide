@@ -1,0 +1,68 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC = 9 AM WIB
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NDK & CMake
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "ndk;26.1.10909125" "cmake;3.22.1" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Generate Gradle wrapper jika belum ada
+        run: |
+          if [ ! -f gradlew ]; then
+            echo "gradlew tidak ditemukan, generate otomatis..."
+            for i in 1 2 3; do
+              gradle wrapper --gradle-version 8.7 && break
+              echo "Percobaan $i gagal (kemungkinan services.gradle.org sedang down), retry dalam 15 detik..."
+              sleep 15
+            done
+          fi
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/26.1.10909125
+
+      - name: Upload nightly artifact ke Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload ke Firebase App Distribution
+        if: ${{ vars.ENABLE_FIREBASE == 'true' }}
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: testers
+          file: app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: "Nightly build ${{ github.sha }}"

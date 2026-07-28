@@ -1,0 +1,19 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+# Keystore rahasia — JANGAN pernah commit
+*.keystore
+*.jks
+keystore.properties
+
+# Room schema export
+app/schemas/

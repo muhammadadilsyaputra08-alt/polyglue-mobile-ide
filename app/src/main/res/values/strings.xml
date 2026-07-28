@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">PolyGlue IDE</string>
+    <string name="app_slogan">Unity Ringan di Saku Anda</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_projects">Proyek</string>
+    <string name="nav_editor">Editor</string>
+    <string name="nav_assets">Aset</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="editor_scene">Scene</string>
+    <string name="editor_hierarchy">Hierarchy</string>
+    <string name="editor_inspector">Inspector</string>
+    <string name="editor_console">Console</string>
+    <string name="editor_snippets">Snippets</string>
+    <string name="editor_code">Code</string>
+    <string name="editor_play">Play</string>
+    <string name="editor_stop">Stop</string>
+    <string name="editor_build">Build APK</string>
+    <string name="action_new_project">Proyek Baru</string>
+    <string name="action_import">Impor</string>
+    <string name="action_export">Ekspor APK</string>
+    <string name="action_save">Simpan</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_github">GitHub</string>
+    <string name="action_share">Bagikan</string>
+    <string name="msg_project_created">Proyek berhasil dibuat!</string>
+    <string name="msg_build_success">APK berhasil dibuat!</string>
+    <string name="msg_sync_complete">Two-Way Sync selesai</string>
+    <string name="msg_live_preview">Live Preview aktif</string>
+</resources>
